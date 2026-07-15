@@ -1,0 +1,121 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 24px;
+  margin-right: 15px;
+  user-select: none;
+}
+
+#hamburger-btn {
+  display: none;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav button {
+  display: block;
+  width: 100%;
+  padding: 10px 25px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 20px;
+  color: #818181;
+  text-decoration: none;
+}
+
+.sidenav button:hover {
+  color: #f1f1f1;
+  background-color: transparent;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  color: #818181;
+  text-decoration: none;
+}
+
+.search-box {
+  display: none;
+  justify-content: center;
+  margin-top: 1em;
+}
+
+.search-box.active {
+  display: flex;
+}
+
+.search-box input {
+  width: 300px;
+  max-width: 80%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.head-line {
+  margin-top: 1em;
+  display: flex;
+  justify-content: center;
+}
+
+.head-line svg {
+  width: 430px;
+}
+
+.menus {
+  margin-top: 1em;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  border-top: 1px solid #ebebeb;
+  border-bottom: 4px double black;
+}
+
+.menus button {
+  border: none;
+  background: none;
+  margin: 5px;
+}
+.menus button:hover {
+  background-color: violet;
+  margin: 5px;
+}
+
+.news-img-size {
+  max-width: 100%;
+  max-height: 250%;
+}
+
+.news {
+  border-bottom: 2px solid black;
+}
+
+@media (max-width: 768px) {
+  .menus {
+    display: none;
+  }
+
+  #hamburger-btn {
+    display: inline-block;
+  }
+}
