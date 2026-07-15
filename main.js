@@ -64,14 +64,14 @@ let render = () => {
           ? moment(item.publishedAt).fromNow()
           : item.publishedAt;
 
-      return ` <div class="row news">
-          <div class="col-lg-4">
+      return ` <div class="row news align-items-center">
+          <div class="col-4">
             <img
               class="news-img-size"
               src="${image}"
             />
           </div>
-          <div class="col-lg-8">
+          <div class="col-8">
             <h2>${item.title}</h2>
             <p>${description}</p>
             <div>${source} * ${date}</div>
