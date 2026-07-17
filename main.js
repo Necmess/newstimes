@@ -4,7 +4,9 @@ const IS_DEV = false;
 
 const NEWS_API_KEY = `de64a150053341d4a649d3b0790737e8`;
 const DEV_API_URL = "https://newsapi.org/v2/top-headlines";
-const SUBMIT_API_URL = "https://noona-times-be-5ca9402f90d9.herokuapp.com/top-headlines";
+const SUBMIT_API_URL =
+  "https://noona-times-be-5ca9402f90d9.herokuapp.com/top-headlines";
+const NEWS_API_URL = IS_DEV ? DEV_API_URL : SUBMIT_API_URL;
 
 const SUMMARY_MAX_LENGTH = 200;
 const FALLBACK_IMAGE =
@@ -30,19 +32,39 @@ const toggleSearch = () => {
   document.getElementById("searchBox").classList.toggle("active");
 };
 
-const getLatestNews = async () => {
-  //비동기 함수 표현
-  const url = new URL(IS_DEV ? DEV_API_URL : SUBMIT_API_URL);
+const menus = document.querySelectorAll(".menus button");
+menus.forEach((menu) =>
+  menu.addEventListener("click", (event) => getNewsByCategory(event))
+);
+
+// 검색 URL을 조립하고 뉴스를 가져와 render()까지 실행하는 공통 함수.
+// country/category 등은 params로 넘겨서 덮어쓴다.
+const fetchNews = async (params = {}) => {
+  const url = new URL(NEWS_API_URL);
   url.searchParams.set("country", "us");
   if (IS_DEV) {
     url.searchParams.set("apiKey", NEWS_API_KEY);
   }
-  // 자바스크립 url 작업을 자주 하니까 인스턴스 url을 가져와 이것을 인스턴스라고 한다. 주소를 통해 생성한다. 겍체로 생성한다.
-  const response = await fetch(url); //어웨이트는 기다리게 하는 것. 패치는 url을 갖고오는 역할 "나 데이터 내놔!!"
-  const data = await response.json(); //파일형태의 확장자. 객체처럼 생긴 텍스트.
+  Object.entries(params).forEach(([key, value]) => {
+    if (value) url.searchParams.set(key, value);
+  });
+
+  const response = await fetch(url);
+  const data = await response.json();
   newsList = data.articles;
   render();
-  console.log("looking the my ewil eyes", newsList);
+};
+
+const getLatestNews = () => fetchNews();
+
+const getNewsByCategory = (event) => {
+  const category = event.target.textContent.toLowerCase();
+  fetchNews({ category });
+};
+
+const getNewsByKeyword = () => {
+  const keyword = document.getElementById("search-input").value;
+  fetchNews({ country: "kr", category: keyword });
 };
 
 let render = () => {
@@ -58,7 +80,8 @@ let render = () => {
       const description = item.description
         ? truncate(item.description, SUMMARY_MAX_LENGTH)
         : "내용없음";
-      const source = item.source && item.source.name ? item.source.name : "no source";
+      const source =
+        item.source && item.source.name ? item.source.name : "no source";
       const date =
         typeof moment !== "undefined"
           ? moment(item.publishedAt).fromNow()

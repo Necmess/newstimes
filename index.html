@@ -14,6 +14,10 @@
   </head>
   <body>
     <section class="container">
+      <div>
+        <input id="search-input" />
+        <button onclick="getNewsByKeyword()">킹색</button>
+      </div>
       <section>
         <div id="mySidenav" class="sidenav">
           <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
@@ -46,7 +50,11 @@
         </div>
 
         <div id="searchBox" class="search-box">
-          <input type="text" id="searchInput" placeholder="검색어를 입력하세요..." />
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="검색어를 입력하세요..."
+          />
         </div>
 
         <div class="head-line">
@@ -57,21 +65,15 @@
           </svg>
         </div>
         <div class="menus">
-          <button>Sport</button>
-          <button>Tech</button>
-          <button>World</button>
-          <button>Finance</button>
-          <button>Politics</button>
           <button>Business</button>
-          <button>Economics</button>
+          <button>Sports</button>
+
           <button>Entertainment</button>
-          <button>Beauty</button>
-          <button>Travel</button>
-          <button>Music</button>
-          <button>Food</button>
+          <button>general</button>
+          <button>health</button>
+          <button>technology</button>
+
           <button>Science</button>
-          <button>Gaming</button>
-          <button>Energy</button>
         </div>
       </section>
       <section id="news-board">
