@@ -30,8 +30,9 @@ menus.forEach((menu) =>
   menu.addEventListener("click", (event) => getNewsByCategory(event))
 );
 
-// 검색 URL을 조립하고 뉴스를 가져와 render()까지 실행하는 공통 함수.
-// country/category 등은 params로 넘겨서 덮어쓴다.
+// 검색 URL을 조립해서 뉴스 목록을 가져오는 공통 함수.
+// country/category/q 등은 params로 넘겨서 덮어쓴다.
+// 응답에 문제가 있거나 결과가 0건이면 에러를 던진다 (호출부에서 try/catch로 처리).
 const fetchNews = async (params = {}) => {
   const url = new URL(NEWS_API_URL);
   url.searchParams.set("country", "us");
@@ -41,20 +42,44 @@ const fetchNews = async (params = {}) => {
 
   const response = await fetch(url);
   const data = await response.json();
-  newsList = data.articles;
-  render();
+
+  if (!response.ok) {
+    throw new Error(data.message || "뉴스를 불러오지 못했습니다.");
+  }
+  if (data.articles.length === 0) {
+    throw new Error("검색 결과가 없습니다.");
+  }
+
+  return data.articles;
 };
 
-const getLatestNews = () => fetchNews();
-
-const getNewsByCategory = (event) => {
-  const category = event.target.textContent.toLowerCase();
-  fetchNews({ category });
+const getLatestNews = async () => {
+  try {
+    newsList = await fetchNews();
+    render();
+  } catch (error) {
+    error_render(error.message);
+  }
 };
 
-const getNewsByKeyword = () => {
-  const keyword = document.getElementById("search-input").value;
-  fetchNews({ country: "kr", q: keyword });
+const getNewsByCategory = async (event) => {
+  try {
+    const category = event.target.textContent.toLowerCase();
+    newsList = await fetchNews({ category });
+    render();
+  } catch (error) {
+    error_render(error.message);
+  }
+};
+
+const getNewsByKeyword = async () => {
+  try {
+    const keyword = document.getElementById("search-input").value;
+    newsList = await fetchNews({ country: "kr", q: keyword });
+    render();
+  } catch (error) {
+    error_render(error.message);
+  }
 };
 
 let render = () => {
@@ -94,6 +119,14 @@ let render = () => {
     .join("");
 
   document.getElementById("news-board").innerHTML = newsHTML;
+};
+
+const error_render = (errorMessage) => {
+  const errorHTML = ` <div class="alert alert-danger" role="alert">
+  ${errorMessage}
+</div>`;
+
+  document.getElementById("news-board").innerHTML = errorHTML;
 };
 
 getLatestNews();
