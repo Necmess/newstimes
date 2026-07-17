@@ -1,12 +1,5 @@
-// 과제 진행 중에는 true(newsapi.org, 데이터 많음, 하루 100회 제한, 로컬에서만 동작).
-// 제출 직전에만 false로 바꿔서 배포 가능한 API로 전환할 것.
-const IS_DEV = false;
-
-const NEWS_API_KEY = `de64a150053341d4a649d3b0790737e8`;
-const DEV_API_URL = "https://newsapi.org/v2/top-headlines";
-const SUBMIT_API_URL =
+const NEWS_API_URL =
   "https://noona-times-be-5ca9402f90d9.herokuapp.com/top-headlines";
-const NEWS_API_URL = IS_DEV ? DEV_API_URL : SUBMIT_API_URL;
 
 const SUMMARY_MAX_LENGTH = 200;
 const FALLBACK_IMAGE =
@@ -42,9 +35,6 @@ menus.forEach((menu) =>
 const fetchNews = async (params = {}) => {
   const url = new URL(NEWS_API_URL);
   url.searchParams.set("country", "us");
-  if (IS_DEV) {
-    url.searchParams.set("apiKey", NEWS_API_KEY);
-  }
   Object.entries(params).forEach(([key, value]) => {
     if (value) url.searchParams.set(key, value);
   });
@@ -64,7 +54,7 @@ const getNewsByCategory = (event) => {
 
 const getNewsByKeyword = () => {
   const keyword = document.getElementById("search-input").value;
-  fetchNews({ country: "kr", category: keyword });
+  fetchNews({ country: "kr", q: keyword });
 };
 
 let render = () => {
