@@ -110,6 +110,25 @@
   border-bottom: 2px solid black;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin: 1.5em 0;
+}
+
+.page-number-btn {
+  border: 1px solid #ccc;
+  background: none;
+  padding: 4px 10px;
+}
+
+.page-number-btn.active {
+  background-color: violet;
+  border-color: violet;
+}
+
 @media (max-width: 768px) {
   .menus {
     display: none;
