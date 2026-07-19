@@ -125,14 +125,25 @@ const goToNextPage = () => {
   goToPage(currentPage + 1);
 };
 
-const MAX_PAGE_BUTTONS = 5; // 한 번에 보여줄 페이지 번호 버튼 개수
+const goToFirstPage = () => {
+  if (currentPage <= 1) return;
+  goToPage(1);
+};
 
-// currentPage를 중심으로 최대 MAX_PAGE_BUTTONS개의 페이지 번호 버튼을 그린다.
+const goToLastPage = () => {
+  if (currentPage >= totalPages) return;
+  goToPage(totalPages);
+};
+
+const PAGE_GROUP_SIZE = 5; // 페이지 그룹 하나에 보여줄 번호 개수
+
+// currentPage가 속한 고정 그룹(1~5, 6~10, ...)의 페이지 번호 버튼을 그리고,
+// 처음/끝 페이지그룹에서는 그쪽 방향 화살표를 숨긴다.
 const renderPageNumbers = () => {
-  let firstPage = Math.max(1, currentPage - Math.floor(MAX_PAGE_BUTTONS / 2));
-  let lastPage = Math.min(totalPages, firstPage + MAX_PAGE_BUTTONS - 1);
-  // 뒤쪽이 짧게 잘리면(마지막 페이지 근처) 앞쪽 시작점을 당겨서 최대한 5개를 채운다.
-  firstPage = Math.max(1, lastPage - MAX_PAGE_BUTTONS + 1);
+  const groupIndex = Math.ceil(currentPage / PAGE_GROUP_SIZE);
+  const firstPage = (groupIndex - 1) * PAGE_GROUP_SIZE + 1;
+  // 마지막 그룹은 totalPages에서 끊기므로 5개보다 적을 수 있다 (억지로 채우지 않는다).
+  const lastPage = Math.min(totalPages, groupIndex * PAGE_GROUP_SIZE);
 
   let buttonsHTML = "";
   for (let i = firstPage; i <= lastPage; i++) {
@@ -141,6 +152,13 @@ const renderPageNumbers = () => {
   }
 
   document.getElementById("page-numbers").innerHTML = buttonsHTML;
+
+  const isFirstGroup = firstPage === 1;
+  const isLastGroup = lastPage === totalPages;
+  document.getElementById("first-page-btn").style.display = isFirstGroup ? "none" : "";
+  document.getElementById("prev-page-btn").style.display = isFirstGroup ? "none" : "";
+  document.getElementById("next-page-btn").style.display = isLastGroup ? "none" : "";
+  document.getElementById("last-page-btn").style.display = isLastGroup ? "none" : "";
 };
 
 let render = () => {
